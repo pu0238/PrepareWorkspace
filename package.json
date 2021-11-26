@@ -1,0 +1,28 @@
+{
+  "name": "PrepareWorkspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node src/index.ts --password password --pathToChrome ./chrome-win/chrome.exe",
+    "dev-b": "node dist index.js --password password --pathToChrome ./chrome-win/chrome.exe",
+    "build": "tsc --build",
+    "start": "node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^16.11.9",
+    "ts-node": "^10.4.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@types/minimist": "^1.2.2",
+    "assert": "^2.0.0",
+    "bindings": "^1.5.0",
+    "minimist": "^1.2.5",
+    "puppeteer": "^11.0.0"
+  }
+}
