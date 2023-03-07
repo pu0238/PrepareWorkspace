@@ -1,33 +1,43 @@
-import minimist from "minimist";
-import { bbScraper } from "./bb/bbScraper";
-import { Credentials } from "./models/credentials.model";
-import { outlookScraper } from "./outlook/outlookScraper";
-import { runInBrowser } from "./scraping/runBrowser";
-import { wuScraper } from "./wu/wuScraper";
+import { Settings } from "./models/settings.model";
 import { settingsValidator } from "./validators/settingsValidator";
-import { validatedURLs, validateURL } from "./validators/urlValidator";
-import settings from "./settings.json";
-import { anyPage } from "./plugins/anyPage";
-import { argsValidator } from "./validators/argsValidator";
 import { setMouseSettings } from "./mouse/setMouseSettings";
 import { runScraper } from "./scraping/runScraper";
+import * as fs from "fs";
+import promptSync from "prompt-sync";
 
-const args = minimist(process.argv.slice(2), { string: "password" });
+const main = async (options: any, password: string) => {
+  if (!fs.existsSync("./settings.json")) {
+    return console.error('Nie znalezionuo pliku "settings.json"');
+  }
+  const settings: Settings = JSON.parse(
+    fs.readFileSync("./settings.json", "utf8")
+  );
 
-(async () => {
-  const options = {};
   settingsValidator(settings);
   setMouseSettings(
     settings.mouseSettings.mousePrecision,
     settings.mouseSettings.mouseSpeed
   );
 
-  if (args.hasOwnProperty("pathToChrome")) {
-    argsValidator(args, "pathToChrome", "string");
-    options["executablePath"] = args.pathToChrome;
+  for (const path of settings.chromePaths) {
+    if (fs.existsSync(path)) {
+      console.log("Uruchomiono chrome! :D");
+      options["executablePath"] = path;
+      await runScraper(settings, password, options).catch((err) =>
+        console.error(err)
+      );
+      break;
+    } else {
+      console.error("Nie znaleziono chrome pod ścieżką:", path);
+    }
   }
+};
 
-  await runScraper(settings, args, options)
-
-})().catch((err) => console.error(err));
-//ts-node src/index.ts --password password
+(async () => {
+  const options = {};
+  const prompt = promptSync();
+  const password = prompt.hide("Podaj haslo: ");
+  await main(options, password);
+  const exit = prompt.hide("Wcisnij enter aby zakonczyc program!");
+  process.exit(0);
+})();

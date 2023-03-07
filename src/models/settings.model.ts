@@ -10,6 +10,8 @@ export interface Settings {
     wu: boolean;
     bb: boolean;
     outlook: boolean;
+    moodle: boolean;
   };
   websitesToOpen: string[];
+  chromePaths?: string[]
 }

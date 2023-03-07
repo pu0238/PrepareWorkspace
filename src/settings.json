@@ -5,11 +5,16 @@
   "autoLogin": {
     "wu": true,
     "bb": true,
-    "outlook": true
+    "outlook": true,
+    "moodle": true
   },
   "websitesToOpen": [],
   "mouseSettings": {
     "mousePrecision": false,
     "mouseSpeed": 10
-  }
+  },
+  "chromePaths": [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+  ]
 }

@@ -1,15 +1,20 @@
 {
-    "userData": {
-        "username": ""
-    },
-    "autoLogin": {
-        "wu": false,
-        "bb": false,
-        "outlook": false
-    },
-    "websitesToOpen": [],
-    "mouseSettings": {
-        "mousePrecision": false,
-        "mouseSpeed": 10
-    }
+  "userData": {
+    "username": "w64141"
+  },
+  "autoLogin": {
+    "wu": true,
+    "bb": true,
+    "outlook": true,
+    "moodle": true
+  },
+  "websitesToOpen": [],
+  "mouseSettings": {
+    "mousePrecision": false,
+    "mouseSpeed": 10
+  },
+  "chromePaths": [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+  ]
 }

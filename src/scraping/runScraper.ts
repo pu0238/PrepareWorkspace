@@ -2,18 +2,17 @@ import { bbScraper } from "../bb/bbScraper";
 import { outlookScraper } from "../outlook/outlookScraper";
 import { anyPage } from "../plugins/anyPage";
 import { Credentials } from "puppeteer";
-import { argsValidator } from "../validators/argsValidator";
 import { validatedURLs } from "../validators/urlValidator";
 import { wuScraper } from "../wu/wuScraper";
 import { runInBrowser } from "./runBrowser";
 import { Settings } from "../models/settings.model";
 import { Browser } from "puppeteer";
-import { validateField } from "../validators/validation";
 import { usernameValidator } from "../validators/usernameValidator";
+import { moodleScraper } from "../moodle/moodleScraper";
 
 export async function runScraper(
   settings: Settings,
-  args: object,
+  password: string,
   options: object
 ): Promise<void> {
   const URLs = validatedURLs(settings.websitesToOpen);
@@ -24,8 +23,8 @@ export async function runScraper(
     settings.autoLogin.bb ||
     settings.autoLogin.outlook
   )
-    runInBrowser(async (browser) => {
-      await autoLogin(browser, settings, args);
+    await runInBrowser(async (browser) => {
+      await autoLogin(browser, settings, password);
       await openURLs(browser, URLs);
     }, options);
 }
@@ -36,10 +35,11 @@ async function openURLs(browser: Browser, URLs: string[]) {
   });
 }
 
-async function autoLogin(browser: Browser, settings: Settings, args: object) {
-  argsValidator(args, "password", "string");
-  const password = args["password"];
-
+async function autoLogin(
+  browser: Browser,
+  settings: Settings,
+  password: string
+) {
   const credentials: Credentials = {
     username: settings.userData.username,
     password: password,
@@ -47,8 +47,10 @@ async function autoLogin(browser: Browser, settings: Settings, args: object) {
 
   if (settings.autoLogin.wu)
     await new wuScraper(() => browser.newPage()).scrape(credentials);
-  if (settings.autoLogin.bb)
-    await new bbScraper(() => browser.newPage()).scrape(credentials);
   if (settings.autoLogin.outlook)
     await new outlookScraper(() => browser.newPage()).scrape(credentials);
+  if (settings.autoLogin.moodle)
+    await new moodleScraper(() => browser.newPage()).scrape(credentials);
+  if (settings.autoLogin.bb)
+    await new bbScraper(() => browser.newPage()).scrape(credentials);
 }
